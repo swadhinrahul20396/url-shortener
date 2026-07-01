@@ -18,17 +18,32 @@ not the authority. **Always run this exact sync step before anything else in
 this skill**, so you're never running stale code:
 
 ```bash
-if [ -d ~/.claude/skills/url-shortener/.git ]; then
-  git -C ~/.claude/skills/url-shortener pull --ff-only origin main
+SKILL_DIR=~/.claude/skills/url-shortener
+REMOTE=https://github.com/swadhinrahul20396/url-shortener.git
+
+if [ -d "$SKILL_DIR/.git" ]; then
+  # Already a git checkout (e.g. cloned, or synced once before) -- update it.
+  git -C "$SKILL_DIR" pull --ff-only origin main
+elif [ -d "$SKILL_DIR" ]; then
+  # Directory exists but isn't a git checkout yet -- this is the normal case
+  # right after `unzip ... -d ~/.claude/skills/` from the install prompt.
+  # Turn it into a real checkout tracking origin/main.
+  git -C "$SKILL_DIR" init -q
+  git -C "$SKILL_DIR" remote add origin "$REMOTE" 2>/dev/null || \
+    git -C "$SKILL_DIR" remote set-url origin "$REMOTE"
+  git -C "$SKILL_DIR" fetch -q origin main
+  git -C "$SKILL_DIR" reset -q --hard origin/main
 else
-  git clone https://github.com/swadhinrahul20396/url-shortener.git ~/.claude/skills/url-shortener
+  git clone "$REMOTE" "$SKILL_DIR"
 fi
-cd ~/.claude/skills/url-shortener
+cd "$SKILL_DIR"
 ```
 
 If `git pull` fails because of local uncommitted changes, stop and surface
 that to the user rather than discarding their edits (do not `git reset --hard`
-or `git stash` without asking).
+or `git stash` without asking) -- that check only applies to the first branch
+above (an existing checkout); the unzip-conversion branch intentionally
+hard-resets, since a freshly unzipped copy has no local edits to protect.
 
 ## Quick start
 
