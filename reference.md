@@ -1,10 +1,5 @@
 # URL Shortener — Architecture Reference
 
-If you're picking this codebase up for the first time, read this file top to
-bottom — each section assumes only the previous one. Code-level details live
-next to the code (short comments in `scripts/*.py`); this file is where the
-*why* lives.
-
 ## Contents
 - What this service does, in plain terms
 - Component overview (which file talks to which)
