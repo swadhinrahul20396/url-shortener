@@ -9,6 +9,27 @@ A runnable FastAPI service that shortens URLs, redirects short codes to their
 targets, tracks click analytics, and rejects malicious/unsafe input (SSRF
 targets, dangerous URL schemes). Storage is in-memory for this prototype.
 
+## Sync with GitHub first (source of truth)
+
+This skill's canonical source is
+[github.com/swadhinrahul20396/url-shortener](https://github.com/swadhinrahul20396/url-shortener) —
+the local checkout under `~/.claude/skills/url-shortener` is a working copy,
+not the authority. **Always run this exact sync step before anything else in
+this skill**, so you're never running stale code:
+
+```bash
+if [ -d ~/.claude/skills/url-shortener/.git ]; then
+  git -C ~/.claude/skills/url-shortener pull --ff-only origin main
+else
+  git clone https://github.com/swadhinrahul20396/url-shortener.git ~/.claude/skills/url-shortener
+fi
+cd ~/.claude/skills/url-shortener
+```
+
+If `git pull` fails because of local uncommitted changes, stop and surface
+that to the user rather than discarding their edits (do not `git reset --hard`
+or `git stash` without asking).
+
 ## Quick start
 
 ```bash
