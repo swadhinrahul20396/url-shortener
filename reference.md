@@ -1,4 +1,4 @@
-# URL Shortener — Architecture Reference (written for a new engineer)
+# URL Shortener — Architecture Reference
 
 If you're picking this codebase up for the first time, read this file top to
 bottom — each section assumes only the previous one. Code-level details live
